@@ -1,0 +1,215 @@
+global main
+extern printf
+extern scanf
+extern puts
+section .data
+MEM: times 1000 db 0
+arr:  times 2 db 0
+men:  db "Output: %d ",10,0
+tru:  db "Output: True",10,0
+fal:  db "Output: False",10,0
+inputFormat: db "%d",0
+var: times 8 db 0
+input_int: db "Input: Enter an integer value",10,0
+input_array_1: db "Input: Enter %d array elements of integer type ",0
+input_array_2: db "for range %d ",0
+input_array_3: db "to %d",10,0
+out: db "Output:",0
+out_array:db " %d",0
+new_line: db 10,0
+DYNA: times 1000 db 0
+error_print: db "RUN TIME ERROR:  Array index out of bound",10,0
+
+
+section .text
+main:
+
+MOV AX,word[MEM+2]
+PUSH AX
+MOV AX,19
+PUSH AX
+POP BX
+POP AX
+MOV word[MEM+2],BX
+MOV AX,word[MEM+4]
+PUSH AX
+MOV AX,56
+PUSH AX
+POP BX
+POP AX
+MOV word[MEM+4],BX
+MOV CX,3
+MOV word[MEM+7],CX
+FOR_LOOP1:
+sub rsp, 0x28
+push    rax
+push    rcx
+mov     rdi, input_int
+xor     rax, rax
+call    printf
+pop     rcx
+pop     rax
+add rsp, 0x28
+
+sub rsp, 0x28
+MOV RSI,var+0
+MOV RDI,inputFormat
+XOR RAX,RAX
+call scanf
+MOV AX,word[var+0]
+MOV word[MEM+0],AX
+add rsp, 0x28
+MOV CX,word[MEM+0]
+CMP CX,1
+JNZ C00
+MOV AX,word[MEM+2]
+PUSH AX
+MOV AX,word[MEM+0]
+PUSH AX
+MOV AX,2
+PUSH AX
+POP BX
+POP AX
+IMUL BX
+PUSH AX
+MOV AX,word[MEM+7]
+PUSH AX
+MOV AX,word[MEM+2]
+PUSH AX
+POP BX
+POP AX
+SUB AX,BX
+PUSH AX
+POP BX
+POP AX
+ADD AX,BX
+PUSH AX
+POP BX
+POP AX
+MOV word[MEM+2],BX
+
+mov rax,0
+MOV rbx,0xFFFFFFFFFFFFFFFF
+cmovl rax,rbx
+movsx EAX,word[MEM+2]
+sub rsp, 0x28
+push    rax
+  push    rcx
+	mov     rdi, men
+	mov     rsi, rax
+	xor     rax, rax
+	call    printf
+  pop     rcx
+pop     rax
+add rsp, 0x28
+JMP SWITCH_EXIT0
+C00:
+CMP CX,2
+JNZ C01
+MOV AX,word[MEM+4]
+PUSH AX
+MOV AX,word[MEM+0]
+PUSH AX
+MOV AX,3
+PUSH AX
+POP BX
+POP AX
+IMUL BX
+PUSH AX
+MOV AX,word[MEM+7]
+PUSH AX
+MOV AX,word[MEM+4]
+PUSH AX
+POP BX
+POP AX
+SUB AX,BX
+PUSH AX
+POP BX
+POP AX
+ADD AX,BX
+PUSH AX
+POP BX
+POP AX
+MOV word[MEM+4],BX
+
+mov rax,0
+MOV rbx,0xFFFFFFFFFFFFFFFF
+cmovl rax,rbx
+movsx EAX,word[MEM+4]
+sub rsp, 0x28
+push    rax
+  push    rcx
+	mov     rdi, men
+	mov     rsi, rax
+	xor     rax, rax
+	call    printf
+  pop     rcx
+pop     rax
+add rsp, 0x28
+JMP SWITCH_EXIT0
+C01:
+
+mov rax,0
+MOV rbx,0xFFFFFFFFFFFFFFFF
+cmovl rax,rbx
+movsx EAX,word[MEM+0]
+sub rsp, 0x28
+push    rax
+  push    rcx
+	mov     rdi, men
+	mov     rsi, rax
+	xor     rax, rax
+	call    printf
+  pop     rcx
+pop     rax
+add rsp, 0x28
+SWITCH_EXIT0:
+
+mov rax,0
+MOV rbx,0xFFFFFFFFFFFFFFFF
+cmovl rax,rbx
+movsx EAX,word[MEM+2]
+sub rsp, 0x28
+push    rax
+  push    rcx
+	mov     rdi, men
+	mov     rsi, rax
+	xor     rax, rax
+	call    printf
+  pop     rcx
+pop     rax
+add rsp, 0x28
+
+mov rax,0
+MOV rbx,0xFFFFFFFFFFFFFFFF
+cmovl rax,rbx
+movsx EAX,word[MEM+4]
+sub rsp, 0x28
+push    rax
+  push    rcx
+	mov     rdi, men
+	mov     rsi, rax
+	xor     rax, rax
+	call    printf
+  pop     rcx
+pop     rax
+add rsp, 0x28
+MOV CX,word[MEM+7]
+INC CX
+MOV word[MEM+7],CX
+MOV AX,6
+CMP CX,AX
+JLE FOR_LOOP1
+jmp exit
+error_bound:
+sub rsp, 0x28
+push    rax
+  push    rcx
+	mov     rdi, error_print
+	xor     rax, rax
+	call    printf
+  pop     rcx
+pop     rax
+add rsp, 0x28
+pop ax
+exit:
